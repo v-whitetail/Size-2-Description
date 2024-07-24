@@ -15,7 +15,7 @@ IS_PROMOTED = True
 PALETTE_ID = config.sample_palette_id
 
 WORKSPACE_ID = 'FusionSolidEnvironment'
-PANEL_ID = 'SolidModifyPanel'
+PANEL_ID = 'InspectPanel'
 COMMAND_BESIDE_ID = ''
 
 ICON_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'resources', '')
@@ -95,14 +95,14 @@ def command_execute(args: adsk.core.CommandEventArgs):
 
     precision = decimal_precision_input.value
     formatter = lambda value: float, 'SCRIPT ERROR'
-    if unit_style_input.selectedItem == 'Decimal Inches':
-        formatter = lambda value: design.fusionUnitsManager.formatValue(value, 'in', precision, showUnits=True)
-    elif unit_style_input.selectedItem == 'Millimeters':
-        formatter = lambda value: design.fusionUnitsManager.formatValue(value, 'mm', precision, showUnits=True)
-    elif unit_style_input.selectedItem == 'Centimeters':
-        formatter = lambda value: design.fusionUnitsManager.formatValue(value, 'cm', precision, showUnits=True)
-    elif unit_style_input.selectedItem == 'Meters':
-        formatter = lambda value: design.fusionUnitsManager.formatValue(value, 'm', precision, showUnits=True)
+    if unit_style_input.selectedItem.name == 'Decimal Inches':
+        formatter = lambda value: design.fusionUnitsManager.formatValue(value, 'in', precision)
+    elif unit_style_input.selectedItem.name == 'Millimeters':
+        formatter = lambda value: design.fusionUnitsManager.formatValue(value, 'mm', precision)
+    elif unit_style_input.selectedItem.name == 'Centimeters':
+        formatter = lambda value: design.fusionUnitsManager.formatValue(value, 'cm', precision)
+    elif unit_style_input.selectedItem.name == 'Meters':
+        formatter = lambda value: design.fusionUnitsManager.formatValue(value, 'm', precision)
     else:
         formatter = lambda value: f'{ImperialFraction.from_measurement(value, design.fusionUnitsManager)}'
 
