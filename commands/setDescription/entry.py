@@ -41,15 +41,13 @@ def stop():
         command_definition.deleteMe()
 
 def command_created(args: adsk.core.CommandCreatedEventArgs):
-
-    design = adsk.fusion.Design.cast(app.activeProduct)
-
     futil.log(f'{CMD_NAME} Command Created Event')
     futil.add_handler(args.command.execute, command_execute, local_handlers=local_handlers)
     futil.add_handler(args.command.inputChanged, command_input_changed, local_handlers=local_handlers)
     futil.add_handler(args.command.executePreview, command_preview, local_handlers=local_handlers)
     futil.add_handler(args.command.destroy, command_destroy, local_handlers=local_handlers)
 
+    args.command.setDialogSize(360,180)
     inputs = args.command.commandInputs
 
     unit_style_input = inputs.addDropDownCommandInput(
@@ -97,7 +95,6 @@ def command_execute(args: adsk.core.CommandEventArgs):
 
     precision = decimal_precision_input.value
     formatter = lambda value: float, 'SCRIPT ERROR'
-
     if unit_style_input.selectedItem == 'Decimal Inches':
         formatter = lambda value: design.fusionUnitsManager.formatValue(value, 'in', precision, showUnits=True)
     elif unit_style_input.selectedItem == 'Millimeters':
